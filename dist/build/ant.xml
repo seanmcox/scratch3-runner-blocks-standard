@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="jar" name="Scratch 3 Runner: Blocks, Standard">
+	<tstamp>
+	     <format property="version" pattern="yyyy.MM.dd"/>
+	</tstamp>
+	
+    <property name="file.jar" value="scratch3runner.blocks.standard.${version}.jar"/>
+    <property name="file.src" value="scratch3runner.blocks.standard.${version}.src.zip"/>
+    <property name="dir.buildfile" value="."/>
+    <property name="dir.workspace" value="${dir.buildfile}/../../.."/>
+    <property name="dir.project" value="${dir.buildfile}/../.."/>
+
+    <target name="jar" description="Compiles to an OSGI-bundle jar.">
+		<delete>
+			<fileset dir="../install" includes="scratch3runner.blocks.standard.*.jar"/>
+		</delete>
+        <jar destfile="../install/${file.jar}">
+            <manifest>
+                <attribute name="Bundle-Name" value="Scratch Runner: Blocks, Standard"/>
+                <attribute name="Bundle-Description" value="A bundle that registers implementations of standard scratch blocks."/>
+                <attribute name="Bundle-Vendor" value="The Shtick"/>
+                <attribute name="Bundle-Version" value="0.1.0"/>
+                <attribute name="Bundle-Activator" value="com.shtick.utils.scratch3.runner.standard.bundle.Activator"/>
+                <attribute name="Export-Package" value="com.shtick.utils.scratch3.runner.standard"/>
+                <attribute name="Import-Package" value="org.osgi.framework,com.shtick.utils.scratch3.runner.core,com.shtick.utils.scratch3.runner.core.elements,com.shtick.utils.scratch3.runner.core.elements.control,javax.swing,javax.swing.border"/>
+            </manifest>
+            <fileset dir="../../bin/blocks"/>
+            <fileset dir="../../bin/osgi"/>
+        </jar>
+    </target>
+
+	<target name="jar_and_bundle" depends="jar" description="Compiles to an OSGI-bundle jar and pushes the update to the main project.">
+		<mkdir dir="${dir.workspace}/scratch-runner-main/dist/osgi_bundles"/>
+		<delete>
+			<fileset dir="${dir.workspace}/scratch-runner-main/dist/osgi_bundles" includes="scratch3runner.blocks.standard.*.jar"/>
+			<fileset dir="${dir.workspace}/scratch-runner-main/dist/osgi_bundles" includes="scratch3runner.blocks.standard.*.zip"/>
+		</delete>
+		<copy file="../install/${file.jar}" todir="${dir.workspace}/scratch-runner-main/dist/osgi_bundles"/>
+        <zip destfile="${dir.workspace}/scratch-runner-main/dist/osgi_bundles/${file.src}">
+            <fileset dir="../../src/blocks"/>
+            <fileset dir="../../src/osgi"/>
+        </zip>
+	</target>
+</project>

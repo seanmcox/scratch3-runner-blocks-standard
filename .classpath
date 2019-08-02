@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" output="bin/test" path="src/test"/>
+	<classpathentry kind="src" output="bin/blocks" path="src/blocks"/>
+	<classpathentry kind="src" output="bin/osgi" path="src/osgi"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/scratch3-runner-core"/>
+	<classpathentry kind="lib" path="dist/install/felix.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

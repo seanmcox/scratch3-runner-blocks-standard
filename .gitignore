@@ -1,6 +1,4 @@
 /bin/**
-/testBin/**
 **/.DS_Store
 /dist/install/scratch*.jar
 /bin/
-/testBin/
