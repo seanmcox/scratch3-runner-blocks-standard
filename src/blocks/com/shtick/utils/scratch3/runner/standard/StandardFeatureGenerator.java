@@ -73,14 +73,18 @@ public class StandardFeatureGenerator implements FeatureSetGenerator{
 		/*
 		final Answer answer = new Answer();
 		final Timer timer = new Timer();
-		final WhenIReceive whenIReveice = new WhenIReceive();
 		final WhenSceneStarts whenSceneStarts = new WhenSceneStarts();
 		*/
+		final EventWhenBroadcastReceived eventWhenBroadcastReceived = new EventWhenBroadcastReceived();
 
 		Opcode[] opcodesArray = new Opcode[] {
 				new ArgumentReporterBoolean(),
 				new ArgumentReporterStringNumber(),
+				new ControlWait(),
 				new ControlWaitUntil(),
+				new EventBroadcast(eventWhenBroadcastReceived),
+				eventWhenBroadcastReceived,
+				new EventWhenFlagClicked(),
 				new ProceduresDefinition(),
 				new ProceduresPrototype(),
 				/*

@@ -10,5 +10,6 @@
 	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/scratch3-runner-core"/>
 	<classpathentry kind="lib" path="dist/install/felix.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

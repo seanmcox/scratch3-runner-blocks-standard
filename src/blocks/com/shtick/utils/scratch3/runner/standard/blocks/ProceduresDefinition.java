@@ -5,7 +5,6 @@ package com.shtick.utils.scratch3.runner.standard.blocks;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 
 import com.shtick.utils.scratch3.runner.core.OpcodeHat;
@@ -19,7 +18,6 @@ import com.shtick.utils.scratch3.runner.core.elements.Mutation;
 import com.shtick.utils.scratch3.runner.core.elements.Script;
 import com.shtick.utils.scratch3.runner.core.elements.ScriptContext;
 import com.shtick.utils.scratch3.runner.core.elements.Target;
-import com.shtick.utils.scratch3.runner.core.elements.TypedValue;
 import com.shtick.utils.scratch3.runner.core.elements.Variable;
 
 /**

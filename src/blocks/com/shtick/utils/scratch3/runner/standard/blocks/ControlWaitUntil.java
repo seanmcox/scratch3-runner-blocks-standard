@@ -45,7 +45,6 @@ public class ControlWaitUntil implements OpcodeControl {
 	 */
 	@Override
 	public Block[] execute(Map<String, Object> arguments) {
-		System.out.println(arguments);
 		Block[] retval = new Block[2];
 		retval[0] = new TestBlock(arguments.get("CONDITION"));
 		retval[1] = new FalseJumpBlock(0);
