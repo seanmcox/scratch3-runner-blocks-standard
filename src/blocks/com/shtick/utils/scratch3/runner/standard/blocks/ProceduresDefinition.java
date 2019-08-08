@@ -75,20 +75,24 @@ public class ProceduresDefinition implements OpcodeHat {
 	@Override
 	public void registerListeningScript(Script script, Map<String, Object> arguments, Mutation mutation) {
 		Map<String, Object> typeArguments = (Map<String, Object>)arguments.get("custom_block");
-		Mutation prototypeMutation = (Mutation)typeArguments.remove("mutation");
+		Mutation prototypeMutation = (Mutation)typeArguments.get("mutation");
+		Map<String, String> argumentNameTranslation = new HashMap<>(typeArguments.size());
+		for(String key:typeArguments.keySet())
+			if(!key.equals("mutation"))
+				argumentNameTranslation.put(key, (String)typeArguments.get(key));
 		
 		boolean isAtomic = false;
 		
-		System.out.println(this.getClass().getCanonicalName());
-		System.out.println(prototypeMutation);
-
 		ScriptContext contextObject = script.getContext().getContextObject();
+		System.out.println(contextObject);
+		System.out.println(prototypeMutation);
 		synchronized(listenersByContextObject) {
+			System.out.println(listenersByContextObject.containsKey(contextObject));
 			if(!listenersByContextObject.containsKey(contextObject))
 				listenersByContextObject.put(contextObject, new HashMap<>());
 			listenersByContextObject.get(contextObject).put(
 					prototypeMutation.getProccode(),
-					new ProcedureDefinition(prototypeMutation.getProccode(),typeArguments.keySet().toArray(new String[typeArguments.size()]), script, isAtomic)
+					new ProcedureDefinition(prototypeMutation.getProccode(),argumentNameTranslation, script, isAtomic)
 			);
 		}
 	}
@@ -98,9 +102,13 @@ public class ProceduresDefinition implements OpcodeHat {
 	 */
 	@Override
 	public void unregisterListeningScript(Script script, Map<String, Object> arguments, Mutation mutation) {
-		Mutation prototypeMutation = (Mutation)arguments.get("mutation");
+		Map<String, Object> typeArguments = (Map<String, Object>)arguments.get("custom_block");
+		Mutation prototypeMutation = (Mutation)typeArguments.get("mutation");
 		ScriptContext contextObject = script.getContext().getContextObject();
+		System.out.println(contextObject);
+		System.out.println(prototypeMutation);
 		synchronized(listenersByContextObject) {
+			System.out.println(listenersByContextObject.containsKey(contextObject));
 			if(!listenersByContextObject.containsKey(contextObject))
 				return;
 			HashMap<String,ProcedureDefinition> listeners = listenersByContextObject.get(contextObject);
@@ -117,7 +125,7 @@ public class ProceduresDefinition implements OpcodeHat {
 	 * @return An OpcodeSubaction of type SUBSCRIPT giving the subscript to be run.
 	 * 
 	 */
-	public OpcodeSubaction call(ScriptContext context, String procName, Object[] params) {
+	public OpcodeSubaction call(ScriptContext context, String procName, Map<String,Object> params) {
 		ScriptContext contextObject = context.getContextObject();
 		ProcedureDefinition procDef;
 		synchronized(listenersByContextObject) {
@@ -133,9 +141,10 @@ public class ProceduresDefinition implements OpcodeHat {
 			String objectString = "\""+contextObject.getObjName()+"\" - "+contextObject;
 			throw new IllegalArgumentException("No script defined with the given name, "+procName+", within the context of "+objectString);
 		}
-		Object[] parameters = new Object[params.length];
-		for(int i=0;i<parameters.length;i++)
-			parameters[i] = params[i];
+		// Translate params (argument name/value pairs) to appropriate proc-local name/value pairs
+		Map<String,Object> parameters = new HashMap<>(params.size());
+		for(String argName:params.keySet())
+			parameters.put(procDef.getLocalName(argName), params.get(argName));
 		
 		return new OpcodeSubaction() {
 			
@@ -151,7 +160,7 @@ public class ProceduresDefinition implements OpcodeHat {
 			
 			@Override
 			public Script getSubscript() {
-				return procDef.script.clone(new ProcedureContext(context, procDef.getProcName(), procDef.getParamNames(), parameters));
+				return procDef.script.clone(new ProcedureContext(context, procDef.getProcName(), parameters));
 			}
 
 			@Override
@@ -163,20 +172,20 @@ public class ProceduresDefinition implements OpcodeHat {
 
 	private class ProcedureDefinition{
 		private String procName;
-		private String[] paramNames;
+		private Map<String, String> argumentNameTranslation;
 		private Script script;
 		private boolean isAtomic;
 		
 		/**
 		 * @param procName 
-		 * @param paramNames
+		 * @param argumentNameTranslation
 		 * @param script
 		 * @param isAtomic
 		 */
-		public ProcedureDefinition(String procName, String[] paramNames, Script script, boolean isAtomic) {
+		public ProcedureDefinition(String procName, Map<String, String> argumentNameTranslation, Script script, boolean isAtomic) {
 			super();
 			this.procName = procName;
-			this.paramNames = paramNames;
+			this.argumentNameTranslation = argumentNameTranslation;
 			this.script = script;
 			this.isAtomic = isAtomic;
 		}
@@ -189,10 +198,11 @@ public class ProceduresDefinition implements OpcodeHat {
 		}
 
 		/**
-		 * @return the paramNames
+		 * @param argName 
+		 * @return the local name for the given argName
 		 */
-		public String[] getParamNames() {
-			return paramNames;
+		public String getLocalName(String argName) {
+			return argumentNameTranslation.get(argName);
 		}
 
 		/**
@@ -217,21 +227,18 @@ public class ProceduresDefinition implements OpcodeHat {
 	 */
 	public static class ProcedureContext implements ScriptContext{
 		private ScriptContext parentContext;
-		private HashMap<String,Object> parameters;
+		private Map<String,Object> parameters;
 		private String procName;
 
 		/**
 		 * @param parentContext
 		 * @param procName 
-		 * @param paramNames 
-		 * @param paramValues Values. Not BlockTuples
+		 * @param parameters 
 		 */
-		public ProcedureContext(ScriptContext parentContext, String procName, String[] paramNames, Object[] paramValues) {
+		public ProcedureContext(ScriptContext parentContext, String procName, Map<String,Object> parameters) {
 			this.parentContext = parentContext;
 			this.procName = procName;
-			parameters = new HashMap<>(paramNames.length);
-			for(int i=0;i<paramNames.length;i++)
-				parameters.put(paramNames[i], paramValues[i]);
+			this.parameters = parameters;
 		}
 		
 		/**

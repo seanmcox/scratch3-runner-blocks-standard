@@ -8,37 +8,54 @@ import org.junit.jupiter.api.Test;
 
 import com.shtick.utils.scratch3.runner.core.Opcode.DataType;
 import com.shtick.utils.scratch3.runner.core.OpcodeSubaction;
-import com.shtick.utils.scratch3.runner.standard.blocks.ControlWait;
+import com.shtick.utils.scratch3.runner.standard.blocks.DataSetVariableTo;
 import com.shtick.utils.scratch3.runner.standard.blocks.util.AllBadMutation;
 import com.shtick.utils.scratch3.runner.standard.blocks.util.AllBadRunner;
 import com.shtick.utils.scratch3.runner.standard.blocks.util.AllBadRuntime;
 import com.shtick.utils.scratch3.runner.standard.blocks.util.AllBadTarget;
+import com.shtick.utils.scratch3.runner.standard.blocks.util.AllBadVariable;
 
-class ControlWaitTest {
+class DataSetVariableToTest {
 
 	@Test
 	void testOpcode() {
-		ControlWait op = new ControlWait();
-		assertEquals("control_wait",op.getOpcode());
+		DataSetVariableTo op = new DataSetVariableTo();
+		assertEquals("data_setvariableto",op.getOpcode());
 	}
 
 	@Test
 	void testArgumentTypes() {
-		ControlWait op = new ControlWait();
+		DataSetVariableTo op = new DataSetVariableTo();
 		HashMap<String,DataType> expectedArguments = new HashMap<>();
-		expectedArguments.put("DURATION", DataType.NUMBER);
+		expectedArguments.put("VALUE", DataType.OBJECT);
+		expectedArguments.put("VARIABLE", DataType.POINTER_VARIABLE);
 		assertEquals(expectedArguments, op.getArgumentTypes());
 	}
 
 	@Test
 	void testExecution() {
-		ControlWait op = new ControlWait();
+		DataSetVariableTo op = new DataSetVariableTo();
 		
+		CanSetVariable canSetVariable = new CanSetVariable();
+
 		HashMap<String,Object> arguments = new HashMap<>();
-		arguments.put("DURATION",125);
+		arguments.put("VALUE","something");
+		arguments.put("VARIABLE",canSetVariable);
 		OpcodeSubaction subaction = op.execute(new AllBadRuntime(), new AllBadRunner(), new AllBadTarget(), arguments, new AllBadMutation());
-		assertEquals(OpcodeSubaction.Type.YIELD_CHECK,subaction.getType());
-		assertNull(subaction.getSubscript());
-		assertFalse(subaction.isSubscriptAtomic());
+		assertNull(subaction);
+		assertEquals("something", canSetVariable.value);
+	}
+	
+	public static class CanSetVariable extends AllBadVariable {
+		public Object value;
+
+		/* (non-Javadoc)
+		 * @see com.shtick.utils.scratch3.runner.standard.blocks.util.AllBadVariable#setValue(java.lang.Object)
+		 */
+		@Override
+		public void setValue(Object value) {
+			this.value = value;
+		}
+		
 	}
 }

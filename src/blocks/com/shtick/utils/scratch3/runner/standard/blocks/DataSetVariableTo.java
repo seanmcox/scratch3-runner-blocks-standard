@@ -9,6 +9,7 @@ import com.shtick.utils.scratch3.runner.core.ScratchRuntime;
 import com.shtick.utils.scratch3.runner.core.ScriptTupleRunner;
 import com.shtick.utils.scratch3.runner.core.elements.Mutation;
 import com.shtick.utils.scratch3.runner.core.elements.ScriptContext;
+import com.shtick.utils.scratch3.runner.core.elements.Variable;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -18,21 +19,13 @@ import java.util.Map;
  * @author sean.cox
  *
  */
-public class EventBroadcast implements OpcodeAction {
+public class DataSetVariableTo implements OpcodeAction {
 	private static final java.util.Map<String,DataType> argumentTypes;
-	private EventWhenBroadcastReceived eventWhenBroadcastReceived;
 	static {
 		HashMap<String, DataType> protoArgumentTypes = new HashMap<>();
-		protoArgumentTypes.put("BROADCAST_INPUT", DataType.POINTER_BROADCAST);
+		protoArgumentTypes.put("VALUE", DataType.OBJECT);
+		protoArgumentTypes.put("VARIABLE", DataType.POINTER_VARIABLE);
 		argumentTypes = Collections.unmodifiableMap(protoArgumentTypes);
-	}
-
-	/**
-	 * 
-	 * @param eventWhenBroadcastReceived
-	 */
-	public EventBroadcast(EventWhenBroadcastReceived eventWhenBroadcastReceived) {
-		this.eventWhenBroadcastReceived = eventWhenBroadcastReceived;
 	}
 
 	/* (non-Javadoc)
@@ -40,7 +33,7 @@ public class EventBroadcast implements OpcodeAction {
 	 */
 	@Override
 	public String getOpcode() {
-		return "event_broadcast";
+		return "data_setvariableto";
 	}
 
 	/* (non-Javadoc)
@@ -59,7 +52,9 @@ public class EventBroadcast implements OpcodeAction {
 			ScratchRuntime runtime,
 			ScriptTupleRunner scriptRunner,
 			ScriptContext context, Map<String, Object> arguments, Mutation mutation) {
-		eventWhenBroadcastReceived.broadcast((String)arguments.get("BROADCAST_INPUT"));
+		Object value = arguments.get("VALUE");
+		Variable var = (Variable)arguments.get("VARIABLE");
+		var.setValue(value);
 		return null;
 	}
 }

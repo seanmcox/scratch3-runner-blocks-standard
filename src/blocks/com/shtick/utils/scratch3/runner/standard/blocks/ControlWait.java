@@ -10,6 +10,7 @@ import java.util.Map;
 import com.shtick.utils.scratch3.runner.core.OpcodeSubaction;
 import com.shtick.utils.scratch3.runner.core.ScratchRuntime;
 import com.shtick.utils.scratch3.runner.core.ScriptTupleRunner;
+import com.shtick.utils.scratch3.runner.core.elements.Mutation;
 import com.shtick.utils.scratch3.runner.core.elements.Script;
 import com.shtick.utils.scratch3.runner.core.elements.ScriptContext;
 import com.shtick.utils.scratch3.runner.core.OpcodeAction;
@@ -47,7 +48,7 @@ public class ControlWait implements OpcodeAction {
 	 */
 	@Override
 	public OpcodeSubaction execute(ScratchRuntime runtime, ScriptTupleRunner scriptRunner, ScriptContext context,
-			Map<String, Object> arguments) {
+			Map<String, Object> arguments, Mutation mutation) {
 		Number n0 = (Number)arguments.get("DURATION");
 		final long startTime = System.currentTimeMillis();
 		final int millis = (int)(n0.doubleValue()*1000);

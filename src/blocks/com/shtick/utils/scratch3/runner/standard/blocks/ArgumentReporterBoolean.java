@@ -4,7 +4,6 @@
 package com.shtick.utils.scratch3.runner.standard.blocks;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 
 import com.shtick.utils.scratch3.runner.core.OpcodeValue;
@@ -19,7 +18,6 @@ import com.shtick.utils.scratch3.runner.core.elements.ScriptContext;
  */
 public class ArgumentReporterBoolean implements OpcodeValue{
 	private HashMap<String, DataType> argumentTypes = new HashMap<>();
-	private HashSet<String> blockIDs = new HashSet<>();
 
 	/* (non-Javadoc)
 	 * @see com.shtick.utils.scratch3.runner.core.Opcode#getOpcode()
@@ -43,6 +41,9 @@ public class ArgumentReporterBoolean implements OpcodeValue{
 	@Override
 	public Object execute(ScratchRuntime runtime, ScriptTupleRunner runner, ScriptContext context,
 			Map<String, Object> arguments, Mutation mutation) {
-		return "boolean";
+		String parameterLocalName = ((String[])arguments.get("VALUE"))[0];
+		if(context instanceof ProceduresDefinition.ProcedureContext)
+			return ((ProceduresDefinition.ProcedureContext)context).getParameterValueByName(parameterLocalName);
+		return parameterLocalName; // This is for reporting the parameter name to the procedures_prototype opcode.
 	}
 }

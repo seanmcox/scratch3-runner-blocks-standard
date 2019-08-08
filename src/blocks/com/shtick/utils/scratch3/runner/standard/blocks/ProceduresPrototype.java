@@ -3,7 +3,6 @@
  */
 package com.shtick.utils.scratch3.runner.standard.blocks;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,13 +17,6 @@ import com.shtick.utils.scratch3.runner.core.elements.ScriptContext;
  *
  */
 public class ProceduresPrototype implements OpcodeValue {
-	private static final java.util.Map<String,DataType> argumentTypes;
-	static {
-		HashMap<String, DataType> protoArgumentTypes = new HashMap<>(1);
-		protoArgumentTypes.put(null, DataType.OBJECT);
-		argumentTypes = Collections.unmodifiableMap(protoArgumentTypes);
-	}
-
 	/* (non-Javadoc)
 	 * @see com.shtick.utils.scratch3.runner.core.Opcode#getOpcode()
 	 */
@@ -39,7 +31,7 @@ public class ProceduresPrototype implements OpcodeValue {
 	 */
 	@Override
 	public Map<String, DataType> getArgumentTypes() {
-		return argumentTypes;
+		return null;
 	}
 
 	/* (non-Javadoc)

@@ -3,42 +3,59 @@ package com.shtick.utils.scratch3.runner.standard.blocks.test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 
 import org.junit.jupiter.api.Test;
 
 import com.shtick.utils.scratch3.runner.core.Opcode.DataType;
 import com.shtick.utils.scratch3.runner.core.OpcodeSubaction;
-import com.shtick.utils.scratch3.runner.standard.blocks.ControlWait;
+import com.shtick.utils.scratch3.runner.standard.blocks.DataAddToList;
+import com.shtick.utils.scratch3.runner.standard.blocks.util.AllBadList;
 import com.shtick.utils.scratch3.runner.standard.blocks.util.AllBadMutation;
 import com.shtick.utils.scratch3.runner.standard.blocks.util.AllBadRunner;
 import com.shtick.utils.scratch3.runner.standard.blocks.util.AllBadRuntime;
 import com.shtick.utils.scratch3.runner.standard.blocks.util.AllBadTarget;
 
-class ControlWaitTest {
+class DataAddToListTest {
 
 	@Test
 	void testOpcode() {
-		ControlWait op = new ControlWait();
-		assertEquals("control_wait",op.getOpcode());
+		DataAddToList op = new DataAddToList();
+		assertEquals("data_addtolist",op.getOpcode());
 	}
 
 	@Test
 	void testArgumentTypes() {
-		ControlWait op = new ControlWait();
+		DataAddToList op = new DataAddToList();
 		HashMap<String,DataType> expectedArguments = new HashMap<>();
-		expectedArguments.put("DURATION", DataType.NUMBER);
+		expectedArguments.put("ITEM", DataType.OBJECT);
+		expectedArguments.put("LIST", DataType.POINTER_LIST);
 		assertEquals(expectedArguments, op.getArgumentTypes());
 	}
 
 	@Test
 	void testExecution() {
-		ControlWait op = new ControlWait();
+		DataAddToList op = new DataAddToList();
 		
+		CanAddList canAddList = new CanAddList();
+		LinkedList<Object> expectedList;
+
 		HashMap<String,Object> arguments = new HashMap<>();
-		arguments.put("DURATION",125);
+		arguments.put("ITEM","something");
+		arguments.put("LIST",canAddList);
 		OpcodeSubaction subaction = op.execute(new AllBadRuntime(), new AllBadRunner(), new AllBadTarget(), arguments, new AllBadMutation());
-		assertEquals(OpcodeSubaction.Type.YIELD_CHECK,subaction.getType());
-		assertNull(subaction.getSubscript());
-		assertFalse(subaction.isSubscriptAtomic());
+		assertNull(subaction);
+		expectedList = new LinkedList<>();
+		expectedList.add("something");
+		assertEquals(expectedList, canAddList.list);
+	}
+	
+	public static class CanAddList extends AllBadList {
+		public LinkedList<Object> list = new LinkedList<>();
+		
+		@Override
+		public void addItem(Object item) {
+			list.add(item);
+		}
 	}
 }

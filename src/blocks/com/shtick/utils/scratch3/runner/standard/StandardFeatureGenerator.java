@@ -76,16 +76,20 @@ public class StandardFeatureGenerator implements FeatureSetGenerator{
 		final WhenSceneStarts whenSceneStarts = new WhenSceneStarts();
 		*/
 		final EventWhenBroadcastReceived eventWhenBroadcastReceived = new EventWhenBroadcastReceived();
+		final ProceduresDefinition proceduresDefinition = new ProceduresDefinition();
 
 		Opcode[] opcodesArray = new Opcode[] {
 				new ArgumentReporterBoolean(),
 				new ArgumentReporterStringNumber(),
 				new ControlWait(),
 				new ControlWaitUntil(),
+				new DataAddToList(),
+				new DataSetVariableTo(),
 				new EventBroadcast(eventWhenBroadcastReceived),
 				eventWhenBroadcastReceived,
 				new EventWhenFlagClicked(),
-				new ProceduresDefinition(),
+				new ProceduresCall(proceduresDefinition),
+				proceduresDefinition,
 				new ProceduresPrototype(),
 				/*
 				new _DividedBy(),

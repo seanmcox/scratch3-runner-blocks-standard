@@ -9,6 +9,7 @@ import com.shtick.utils.scratch3.runner.core.ScratchRuntime;
 import com.shtick.utils.scratch3.runner.core.ScriptTupleRunner;
 import com.shtick.utils.scratch3.runner.core.elements.Mutation;
 import com.shtick.utils.scratch3.runner.core.elements.ScriptContext;
+import com.shtick.utils.scratch3.runner.core.elements.Variable;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -18,21 +19,15 @@ import java.util.Map;
  * @author sean.cox
  *
  */
-public class EventBroadcast implements OpcodeAction {
-	private static final java.util.Map<String,DataType> argumentTypes;
-	private EventWhenBroadcastReceived eventWhenBroadcastReceived;
-	static {
-		HashMap<String, DataType> protoArgumentTypes = new HashMap<>();
-		protoArgumentTypes.put("BROADCAST_INPUT", DataType.POINTER_BROADCAST);
-		argumentTypes = Collections.unmodifiableMap(protoArgumentTypes);
-	}
+public class ProceduresCall implements OpcodeAction {
+	private ProceduresDefinition proceduresDefinition;
 
 	/**
+	 * @param proceduresDefinition 
 	 * 
-	 * @param eventWhenBroadcastReceived
 	 */
-	public EventBroadcast(EventWhenBroadcastReceived eventWhenBroadcastReceived) {
-		this.eventWhenBroadcastReceived = eventWhenBroadcastReceived;
+	public ProceduresCall(ProceduresDefinition proceduresDefinition) {
+		this.proceduresDefinition = proceduresDefinition;
 	}
 
 	/* (non-Javadoc)
@@ -40,7 +35,7 @@ public class EventBroadcast implements OpcodeAction {
 	 */
 	@Override
 	public String getOpcode() {
-		return "event_broadcast";
+		return "procedures_call";
 	}
 
 	/* (non-Javadoc)
@@ -48,7 +43,7 @@ public class EventBroadcast implements OpcodeAction {
 	 */
 	@Override
 	public Map<String,DataType> getArgumentTypes() {
-		return argumentTypes;
+		return null;
 	}
 
 	/* (non-Javadoc)
@@ -59,7 +54,7 @@ public class EventBroadcast implements OpcodeAction {
 			ScratchRuntime runtime,
 			ScriptTupleRunner scriptRunner,
 			ScriptContext context, Map<String, Object> arguments, Mutation mutation) {
-		eventWhenBroadcastReceived.broadcast((String)arguments.get("BROADCAST_INPUT"));
-		return null;
+		String proccode = mutation.getProccode();
+		return proceduresDefinition.call(context, proccode, arguments);
 	}
 }

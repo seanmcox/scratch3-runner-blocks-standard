@@ -41,6 +41,9 @@ public class ArgumentReporterStringNumber implements OpcodeValue{
 	@Override
 	public Object execute(ScratchRuntime runtime, ScriptTupleRunner runner, ScriptContext context,
 			Map<String, Object> arguments, Mutation mutation) {
-		return "string_number";
+		String parameterLocalName = ((String[])arguments.get("VALUE"))[0];
+		if(context instanceof ProceduresDefinition.ProcedureContext)
+			return ((ProceduresDefinition.ProcedureContext)context).getParameterValueByName(parameterLocalName);
+		return parameterLocalName; // This is for reporting the parameter name to the procedures_prototype opcode.
 	}
 }

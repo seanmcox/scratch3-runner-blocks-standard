@@ -61,7 +61,7 @@ class EventBroadcastTest {
 		
 		HashMap<String,Object> arguments = new HashMap<>();
 		arguments.put("BROADCAST_INPUT","message0");
-		OpcodeSubaction subaction = op.execute(new AllBadRuntime(), new AllBadRunner(), new AllBadTarget(), arguments);
+		OpcodeSubaction subaction = op.execute(new AllBadRuntime(), new AllBadRunner(), new AllBadTarget(), arguments, new AllBadMutation());
 		assertNull(subaction);
 		assertEquals(script0, runtime.scriptRun);
 		
