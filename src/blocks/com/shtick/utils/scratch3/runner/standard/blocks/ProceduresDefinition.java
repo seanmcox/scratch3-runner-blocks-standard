@@ -84,10 +84,7 @@ public class ProceduresDefinition implements OpcodeHat {
 		boolean isAtomic = false;
 		
 		ScriptContext contextObject = script.getContext().getContextObject();
-		System.out.println(contextObject);
-		System.out.println(prototypeMutation);
 		synchronized(listenersByContextObject) {
-			System.out.println(listenersByContextObject.containsKey(contextObject));
 			if(!listenersByContextObject.containsKey(contextObject))
 				listenersByContextObject.put(contextObject, new HashMap<>());
 			listenersByContextObject.get(contextObject).put(
@@ -105,10 +102,7 @@ public class ProceduresDefinition implements OpcodeHat {
 		Map<String, Object> typeArguments = (Map<String, Object>)arguments.get("custom_block");
 		Mutation prototypeMutation = (Mutation)typeArguments.get("mutation");
 		ScriptContext contextObject = script.getContext().getContextObject();
-		System.out.println(contextObject);
-		System.out.println(prototypeMutation);
 		synchronized(listenersByContextObject) {
-			System.out.println(listenersByContextObject.containsKey(contextObject));
 			if(!listenersByContextObject.containsKey(contextObject))
 				return;
 			HashMap<String,ProcedureDefinition> listeners = listenersByContextObject.get(contextObject);

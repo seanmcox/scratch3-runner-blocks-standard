@@ -81,6 +81,7 @@ public class StandardFeatureGenerator implements FeatureSetGenerator{
 		Opcode[] opcodesArray = new Opcode[] {
 				new ArgumentReporterBoolean(),
 				new ArgumentReporterStringNumber(),
+				new ControlIfElse(),
 				new ControlWait(),
 				new ControlWaitUntil(),
 				new DataAddToList(),
@@ -88,6 +89,9 @@ public class StandardFeatureGenerator implements FeatureSetGenerator{
 				new EventBroadcast(eventWhenBroadcastReceived),
 				eventWhenBroadcastReceived,
 				new EventWhenFlagClicked(),
+				new LooksSay(),
+				new LooksSayForSecs(),
+				new LooksThink(),
 				new ProceduresCall(proceduresDefinition),
 				proceduresDefinition,
 				new ProceduresPrototype(),
