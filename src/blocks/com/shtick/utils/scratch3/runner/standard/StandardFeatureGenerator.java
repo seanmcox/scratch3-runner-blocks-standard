@@ -81,6 +81,7 @@ public class StandardFeatureGenerator implements FeatureSetGenerator{
 		Opcode[] opcodesArray = new Opcode[] {
 				new ArgumentReporterBoolean(),
 				new ArgumentReporterStringNumber(),
+				new ControlForever(),
 				new ControlIfElse(),
 				new ControlWait(),
 				new ControlWaitUntil(),

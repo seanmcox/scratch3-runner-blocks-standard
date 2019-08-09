@@ -45,7 +45,7 @@ class EventBroadcastTest {
 		Script script0 = new AllBadScript();
 		HashMap<String,Object> registerArgs0 = new HashMap<String,Object>();
 		{
-			registerArgs0.put("BROADCAST_INPUT",new Broadcast() {
+			registerArgs0.put("BROADCAST_OPTION",new Broadcast() {
 				@Override
 				public String getName() {
 					return "message0";
@@ -60,10 +60,33 @@ class EventBroadcastTest {
 		eventWhenBroadcastReceived.registerListeningScript(script0, registerArgs0,new AllBadMutation());
 		
 		HashMap<String,Object> arguments = new HashMap<>();
-		arguments.put("BROADCAST_INPUT","message0");
+		arguments.put("BROADCAST_INPUT",new TestBroadcast("message0"));
 		OpcodeSubaction subaction = op.execute(new AllBadRuntime(), new AllBadRunner(), new AllBadTarget(), arguments, new AllBadMutation());
 		assertNull(subaction);
 		assertEquals(script0, runtime.scriptRun);
+	}
+	
+	public static class TestBroadcast implements Broadcast{
+		public String name;
 		
+		public TestBroadcast(String name) {
+			this.name = name;
+		}
+
+		/* (non-Javadoc)
+		 * @see com.shtick.utils.scratch3.runner.core.elements.Broadcast#getID()
+		 */
+		@Override
+		public String getID() {
+			return null;
+		}
+
+		/* (non-Javadoc)
+		 * @see com.shtick.utils.scratch3.runner.core.elements.Broadcast#getName()
+		 */
+		@Override
+		public String getName() {
+			return name;
+		}
 	}
 }

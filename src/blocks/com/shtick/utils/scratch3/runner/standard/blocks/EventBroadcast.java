@@ -7,6 +7,7 @@ import com.shtick.utils.scratch3.runner.core.OpcodeAction;
 import com.shtick.utils.scratch3.runner.core.OpcodeSubaction;
 import com.shtick.utils.scratch3.runner.core.ScratchRuntime;
 import com.shtick.utils.scratch3.runner.core.ScriptTupleRunner;
+import com.shtick.utils.scratch3.runner.core.elements.Broadcast;
 import com.shtick.utils.scratch3.runner.core.elements.Mutation;
 import com.shtick.utils.scratch3.runner.core.elements.ScriptContext;
 
@@ -59,7 +60,7 @@ public class EventBroadcast implements OpcodeAction {
 			ScratchRuntime runtime,
 			ScriptTupleRunner scriptRunner,
 			ScriptContext context, Map<String, Object> arguments, Mutation mutation) {
-		eventWhenBroadcastReceived.broadcast((String)arguments.get("BROADCAST_INPUT"));
+		eventWhenBroadcastReceived.broadcast(((Broadcast)arguments.get("BROADCAST_INPUT")).getName());
 		return null;
 	}
 }

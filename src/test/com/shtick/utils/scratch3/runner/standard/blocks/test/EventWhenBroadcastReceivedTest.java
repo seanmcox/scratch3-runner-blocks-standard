@@ -30,7 +30,7 @@ class EventWhenBroadcastReceivedTest {
 	void testArgumentTypes() {
 		EventWhenBroadcastReceived op = new EventWhenBroadcastReceived();
 		HashMap<String, DataType> argumentTypes = new HashMap<>();
-		argumentTypes.put("BROADCAST_INPUT", DataType.POINTER_BROADCAST);
+		argumentTypes.put("BROADCAST_OPTION", DataType.POINTER_BROADCAST);
 		assertEquals(argumentTypes, op.getArgumentTypes());
 	}
 
@@ -53,7 +53,7 @@ class EventWhenBroadcastReceivedTest {
 			HashMap<String,Object> registerArgs0 = new HashMap<String,Object>();
 			HashMap<String,Object> registerArgs1 = new HashMap<String,Object>();
 			{
-				registerArgs0.put("BROADCAST_INPUT",new Broadcast() {
+				registerArgs0.put("BROADCAST_OPTION",new Broadcast() {
 					@Override
 					public String getName() {
 						return "message0";
@@ -64,7 +64,7 @@ class EventWhenBroadcastReceivedTest {
 						return null;
 					}
 				});
-				registerArgs1.put("BROADCAST_INPUT",new Broadcast() {
+				registerArgs1.put("BROADCAST_OPTION",new Broadcast() {
 					@Override
 					public String getName() {
 						return "message1";

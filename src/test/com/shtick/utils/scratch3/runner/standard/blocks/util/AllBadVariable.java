@@ -15,8 +15,8 @@ public class AllBadVariable implements Variable {
 	 * @see com.shtick.utils.scratch3.runner.core.elements.Variable#getName()
 	 */
 	@Override
-	public String getName() {
-		throw new UnsupportedOperationException("Called getName when not expected.");
+	public String getID() {
+		throw new UnsupportedOperationException("Called getID when not expected.");
 	}
 
 	/* (non-Javadoc)

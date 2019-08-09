@@ -28,7 +28,7 @@ public class EventWhenBroadcastReceived implements OpcodeHat {
 	private ScratchRuntime runtime;
 	static {
 		HashMap<String, DataType> protoArgumentTypes = new HashMap<>();
-		protoArgumentTypes.put("BROADCAST_INPUT", DataType.POINTER_BROADCAST);
+		protoArgumentTypes.put("BROADCAST_OPTION", DataType.POINTER_BROADCAST);
 		argumentTypes = Collections.unmodifiableMap(protoArgumentTypes);
 	}
 
@@ -62,7 +62,7 @@ public class EventWhenBroadcastReceived implements OpcodeHat {
 	@Override
 	public void registerListeningScript(Script script, Map<String, Object> arguments, Mutation mutation) {
 		synchronized(listeners) {
-			Broadcast broadcast = (Broadcast)arguments.get("BROADCAST_INPUT");
+			Broadcast broadcast = (Broadcast)arguments.get("BROADCAST_OPTION");
 			if(!listeners.containsKey(broadcast.getName()))
 				listeners.put(broadcast.getName(), new LinkedList<>());
 			listeners.get(broadcast.getName()).add(script);
@@ -75,7 +75,7 @@ public class EventWhenBroadcastReceived implements OpcodeHat {
 	@Override
 	public void unregisterListeningScript(Script script, Map<String, Object> arguments, Mutation mutation) {
 		synchronized(listeners) {
-			Broadcast broadcast = (Broadcast)arguments.get("BROADCAST_INPUT");
+			Broadcast broadcast = (Broadcast)arguments.get("BROADCAST_OPTION");
 			if(!listeners.containsKey(broadcast.getName()))
 				return;
 			java.util.List<Script> scripts = listeners.get(broadcast.getName());
